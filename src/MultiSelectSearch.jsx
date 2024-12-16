@@ -106,11 +106,13 @@ const MultiSelectSearchBar = () => {
     // To avoid selecting the same ingredient twice
     if (selectedItems.includes(selectedItem)) {
       return setSelectedItems((prevSelectedItems) => [...prevSelectedItems]);
-    } else
-      return setSelectedItems((prevSelectedItems) => [
+    } else {
+      setSelectedItems((prevSelectedItems) => [
         ...prevSelectedItems,
         selectedItem,
       ]);
+      setSearchInput("");
+    }
   };
 
   const handleRemoveSelectedItem = (id) => {
@@ -126,7 +128,7 @@ const MultiSelectSearchBar = () => {
           if (search.value === "" && prevSelectedItems.length >= 1) {
             return prevSelectedItems.slice(0, -1);
           }
-          return prevSelectedItems; // return empty when all ingredients are removed
+          return prevSelectedItems;
         });
       }
     }
@@ -135,7 +137,7 @@ const MultiSelectSearchBar = () => {
   return (
     <>
       <Command
-        shouldFilter={false} // Disable default filtering (i.e. filtering without debouncing)
+        shouldFilter={false} // Disable default filtering
         className="relative max-w-[35rem] overflow-visible rounded-md border bg-transparent"
         onKeyDown={handleBackspace}
       >
@@ -157,7 +159,9 @@ const MultiSelectSearchBar = () => {
                     e.stopPropagation();
                   }}
                 >
-                  <span className="text-[1rem]">{selectedItem.product}</span>
+                  <span className="text-[1rem] font-normal">
+                    {selectedItem.product}
+                  </span>
                   <motion.button
                     whileHover={{ scale: 1.2 }}
                     whileTap={{ scale: 0.9 }}
@@ -200,13 +204,16 @@ const MultiSelectSearchBar = () => {
                 {filteredItems.map((filteredItem) => (
                   <CommandItem
                     key={filteredItem.id}
-                    className="cursor-pointer"
+                    className={` ${
+                      selectedItems.includes(filteredItem)
+                        ? "cursor-default"
+                        : "cursor-pointer"
+                    }`}
                     onMouseDown={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
                     }}
                     onSelect={() => {
-                      setSearchInput("");
                       handleItemSelect(filteredItem.id);
                     }}
                   >
