@@ -14,35 +14,13 @@ import { Badge } from "@/components/ui/badge";
 import { Command as CommandPrimitive } from "cmdk";
 import useDebouncedSearchInput from "@/useDebouncedSearchInput";
 
-const items = [
-  {
-    id: 1,
-    aisle: 3,
-    product: "Apples",
-  },
-  {
-    id: 2,
-    aisle: 5,
-    product: "Chocolate",
-  },
-  {
-    id: 3,
-    aisle: 4,
-    product: "Potato Chips",
-  },
-  {
-    id: 4,
-    aisle: 3,
-    product: "Bananas",
-  },
-  {
-    id: 5,
-    aisle: 3,
-    product: "Strawberries",
-  },
-];
-
-const MultiSelectSearchBar = () => {
+const MultiselectSearch = ({
+  items = [],
+  placeholder = "Select items...", // Default placeholder text
+  debounceDelay = 500, // Default debounce delay
+  showLoadingIndicator = true, // Default visible
+  emptyText = "No results found", // Default empty text
+}) => {
   const searchRef = useRef(null);
   const search = searchRef.current;
 
@@ -52,7 +30,10 @@ const MultiSelectSearchBar = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const debouncedSearchInput = useDebouncedSearchInput(searchInput, 700);
+  const debouncedSearchInput = useDebouncedSearchInput(
+    searchInput,
+    debounceDelay
+  );
 
   const [isLoading, setIsLoading] = useState(false); // Loading Animation
 
@@ -95,7 +76,7 @@ const MultiSelectSearchBar = () => {
       clearTimeout(loaderTimeout);
     }
 
-    loaderTimeout = setTimeout(() => setIsLoading(true), 500);
+    loaderTimeout = setTimeout(() => setIsLoading(true), 300);
     setSearchInput(value);
   };
 
@@ -180,11 +161,11 @@ const MultiSelectSearchBar = () => {
             className="flex-grow bg-transparent outline-none"
             value={searchInput}
             onValueChange={handleSearchValueChange}
-            placeholder="Search items..."
+            placeholder={placeholder}
             onFocus={handleSearchFocus}
             onBlur={handleSearchBlur}
           ></CommandPrimitive.Input>
-          {isLoading && (
+          {isLoading && showLoadingIndicator && (
             <Lottie
               className="absolute -right-4 h-24 w-24"
               animationData={loaderAnimation}
@@ -198,7 +179,7 @@ const MultiSelectSearchBar = () => {
           <CommandList className="absolute left-0 right-0 top-[100%] overflow-visible">
             <div className="mt-4 rounded-md bg-white shadow-custom">
               <CommandEmpty>
-                <span className="text-[1rem]">No results found.</span>
+                <span className="text-[1rem]">{emptyText}</span>
               </CommandEmpty>
               <CommandGroup>
                 {filteredItems.map((filteredItem) => (
@@ -240,4 +221,4 @@ const MultiSelectSearchBar = () => {
   );
 };
 
-export default MultiSelectSearchBar;
+export default MultiselectSearch;

@@ -1,4 +1,32 @@
-import MultiSelectSearch from "./MultiSelectSearch";
+import MultiselectSearch from "./MultiselectSearch";
+
+const items = [
+  {
+    id: 1,
+    aisle: 3,
+    product: "Apples",
+  },
+  {
+    id: 2,
+    aisle: 5,
+    product: "Chocolate",
+  },
+  {
+    id: 3,
+    aisle: 4,
+    product: "Potato Chips",
+  },
+  {
+    id: 4,
+    aisle: 3,
+    product: "Bananas",
+  },
+  {
+    id: 5,
+    aisle: 3,
+    product: "Strawberries",
+  },
+];
 
 function App() {
   return (
@@ -8,7 +36,7 @@ function App() {
           <h1 className="font-medium text-xl text-neutral-800 tracking-[-0.01em]">
             Multi-select with search
           </h1>
-          <MultiSelectSearch />
+          <MultiselectSearch items={items} />
         </div>
         <div className="text-neutral-400 text-center absolute bottom-6">
           Built by {""}
